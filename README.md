@@ -3,8 +3,9 @@ Boilerplate to create a React app using Rollup.
 
 ## Why
 - Create a minimal from scratch React app using Rollup instead of Webpack
+- No complete boilerplate / example how to bundle React using Rollup
 - Stay compatible with react-app commands (start, build, test)
-- Conform to good practices (Hsuky, Commitlint, ...)
+- Conform to good practices (Husky, Commitlint, ...)
 
 ## TODO
 - [x] Base code
