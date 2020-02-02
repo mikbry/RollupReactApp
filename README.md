@@ -1,4 +1,4 @@
-# [WIP] Rollup React App
+# `rollup-react-app`
 
 Boilerplate to create a React app using Rollup.
 
