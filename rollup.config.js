@@ -1,4 +1,3 @@
-import fs from 'fs';
 import resolve from '@rollup/plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
@@ -7,30 +6,7 @@ import url from '@rollup/plugin-url';
 import hotcss from 'rollup-plugin-hot-css';
 import commonjs from 'rollup-plugin-commonjs-alternate';
 import refresh from 'rollup-plugin-react-refresh';
-
-const fsp = fs.promises;
-const stringToRegex = str => {
-  const main = str.match(/\/(.+)\/.*/)[1];
-  const options = str.match(/\/.+\/(.*)/)[1];
-  return new RegExp(main, options);
-};
-
-const copyFile = async (filename, output, replacements) => {
-  try {
-    if (replacements) {
-      let buffer = (await fsp.readFile(filename)).toString();
-      Object.keys(replacements).forEach(pattern => {
-        const regex = stringToRegex(pattern);
-        buffer = buffer.replace(regex, replacements[pattern]);
-      });
-      await fsp.writeFile(output, buffer);
-    } else {
-      await fsp.copyFile(filename, output);
-    }
-  } catch (err) {
-    //
-  }
-};
+import copy from 'rollup-plugin-copy';
 
 const appName = 'rollupReactApp';
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -50,21 +26,42 @@ const genScripts = () => {
   return scripts;
 };
 
-// copy files
-(async () => {
-  await copyFile('public/favicon.ico', 'build/favicon.ico');
-  await copyFile('public/logo192.png', 'build/logo192.png');
-  await copyFile('public/logo512.png', 'build/logo512.png');
-  await copyFile('public/manifest.json', 'build/manifest.json');
-  await copyFile('public/robots.txt', 'build/robots.txt');
-  await copyFile('public/index.html', 'build/index.html', {
-    '/%SCRIPTS%/': genScripts(),
-    '/%STYLES%/': styles,
-    '/%PUBLIC_URL%/g': publicUrl,
-  });
-})();
+const watch = () => ({
+  exclude: [
+    'build/favicon.ico',
+    'build/logo192.png',
+    'build/logo512.png',
+    'build/manifest.json',
+    'build/robots.txt',
+    'build/index.html',
+  ],
+});
 
 const plugins = babelConf => [
+  copy({
+    targets: [
+      {
+        src: [
+          'public/favicon.ico',
+          'public/logo192.png',
+          'public/logo512.png',
+          'public/manifest.json',
+          'public/robots.text',
+        ],
+        dest: 'build',
+      },
+      {
+        src: 'public/index.html',
+        dest: 'build',
+        transform: contents =>
+          contents
+            .toString()
+            .replace('%SCRIPTS%', genScripts())
+            .replace(/%PUBLIC_URL%/g, publicUrl)
+            .replace('%STYLES%', styles),
+      },
+    ],
+  }),
   replace({
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
   }),
@@ -89,6 +86,7 @@ const esm = {
     assetFileNames: development ? '[name].[hash][extname]' : '[name][extname]',
     sourcemap: true,
   },
+  watch: watch(),
   plugins: plugins({
     exclude: 'node_modules/**',
     presets: [['@babel/preset-env'], '@babel/preset-react'],
@@ -106,6 +104,7 @@ const iife = {
     name: appName,
     sourcemap: true,
   },
+  watch: watch(),
   plugins: plugins({
     presets: [
       [
