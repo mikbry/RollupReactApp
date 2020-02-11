@@ -71,7 +71,7 @@ const plugins = babelConf => [
     filename: development ? 'styles.css' : 'static/assets/styles.css',
   }),
   babel(babelConf),
-  resolve(),
+  resolve({ extensions: ['.mjs', '.js', '.jsx', '.json'] }),
   commonjs({ extensions: ['.js', '.jsx'] }),
   production && terser(),
   development && refresh(),
