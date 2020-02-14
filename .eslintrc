@@ -20,7 +20,7 @@
     "browser": true,
     "es2020": true,
     "node": true,
-    "mocha": true
+    "jest/globals": true
   },
   "settings": {
     "react": {
@@ -29,7 +29,8 @@
   },
   "plugins": [
     "prettier",
-    "react"
+    "react",
+    "jest"
   ],
   "rules": {
     "react/jsx-filename-extension": [

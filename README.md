@@ -15,7 +15,7 @@ Another point `rollup-create-app` try to follow `create-react-app`, the source c
 - Be compatible to good practices (Husky, Commitlint, ...)
 - Experiment new stuff (Nollup, Typescript)
 
-## TODO
+## WIP
 - [x] Base code
 - [x] Serve
 - [x] Jsx support
@@ -23,7 +23,7 @@ Another point `rollup-create-app` try to follow `create-react-app`, the source c
 - [x] Css / images
 - [x] Hot reload
 - [x] esm/iife scripts support
-- [ ] test
+- [x] test
 - [ ] Typescript
 
 ## Inspiration
@@ -57,5 +57,8 @@ Youc could test it using this command:
 
 ### `yarn test`
 
-TODO
+Run tests using [jest](https://jestjs.io/). See `src/App.test.jsx`
 
+### `yarn coverage`
+
+Does a code coverage report. A directory coverage is generated containing an html report.
