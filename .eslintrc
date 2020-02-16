@@ -30,7 +30,8 @@
   "plugins": [
     "prettier",
     "react",
-    "jest"
+    "jest",
+    "react-hooks"
   ],
   "rules": {
     "react/jsx-filename-extension": [
